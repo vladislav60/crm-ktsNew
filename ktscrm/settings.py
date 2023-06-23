@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # №1 Регистрация приложения
-    'dogovornoy.apps.DogovornoyConfig'
+    'dogovornoy.apps.DogovornoyConfig',
+    'avatar',
+    'profiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'ktscrm.urls'
@@ -135,3 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 #10 дериктории для сохранения фото
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+LOGIN_URL = '/login/'
+AUTH_PROFILE_MODULE = 'profiles.Profile'
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

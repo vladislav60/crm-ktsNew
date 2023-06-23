@@ -318,3 +318,7 @@
   }
 
 })();
+
+$('#table_bazadog').dataTable( {
+  "pageLength": 500
+} );

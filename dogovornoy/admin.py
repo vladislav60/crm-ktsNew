@@ -13,3 +13,5 @@ class ktsAdmin(admin.ModelAdmin):
 
 # Регистрация Базы клиентов договорного в админке
 admin.site.register(kts, ktsAdmin)
+admin.site.register(rekvizity)
+admin.site.register(vid_sign)

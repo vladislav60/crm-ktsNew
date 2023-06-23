@@ -1,13 +1,13 @@
 {% extends 'dogovornoy/base.html' %}
-{% load static %}
+
 {% block content %}
 
 <div class="pagetitle">
-    <h1>Новый клиент</h1>
+    <h1>Изменить клиента</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'baza_dogovorov' %}">База договоров</a></li>
-            <li class="breadcrumb-item active">Новый клиент</li>
+            <li class="breadcrumb-item active">Изменить клиента</li>
         </ol>
     </nav>
 </div><!-- End Page Title -->
@@ -20,14 +20,10 @@
         <!--                Форма номер 1 Начало-->
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body card-form">
                     <!-- Обязательно для заполнения -->
-                    <form class="row g-3" action="{% url 'add_client' %}" method="post" enctype="multipart/form-data">
+                    <form class="row g-3" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <!--                        <div class="alert alert-danger alert-dismissible fade show" role="alert">-->
-                        <!--                            A simple danger alert—check it out!-->
-                        <!--                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-                        <!--                        </div>-->
 
                         <div class="col-md-6">
                             <label for="{{ form.company_name.id_for_label }}" class="form-label">
@@ -115,28 +111,14 @@
                             {{ form.vid_sign }}
                             <div class="form-error">{{vid_sign.errors}}</div>
                         </div>
-<!--                        <div class="col-md-4">-->
-<!--                            <div class="form-check">-->
-<!--                                <legend class="col-form-label col-sm-3">{{ form.urik.label }} <i class="colred"> *</i></legend>-->
-<!--                                <div class="col-sm-10">-->
+                        <div class="col-md-4">
+                          <legend class="col-form-label col-sm-4 pt-1">{{ form.urik.label }}</legend>
+                          <div class="col-md-1 form-switch">
 
-<!--                                    <div class="form-check">-->
-<!--                                {{ form.urik }}-->
-<!--                                <div class="form-error">{{urik.errors}}</div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                            {{ form.urik }}
 
-                        <div class="col-md-4 ">
-                  <legend class="col-form-label col-sm-4 pt-1">{{ form.urik.label }}</legend>
-                  <div class="col-sm-8 form-switch">
-
-                    {{ form.urik }}
-
-                  </div>
-                </div>
-
+                          </div>
+                        </div>
                         <div class="col-md-3">
                             <label for="{{ form.chasi_po_dog.id_for_label }}" class="form-label">
                                 {{ form.chasi_po_dog.label }} <i class="colred"> *</i>
@@ -300,11 +282,11 @@
 
 
                         <div class="d-grid gap-2 mt-3">
-                            <button type="submit" class="btn btn-success rounded-pill" >Добавить клиента</button>
+                            <button type="submit" class="btn btn-success rounded-pill" >Изменить</button>
                         </div>
                     </form>
 
-                </div>
+              </div>
             </div>
         </div>
         <!--                Форма номер 2 Конец-->

@@ -26,6 +26,24 @@
 
                     <form class="row g-3">
                         <div class="col-6">
+                            <label for="inputNanme4" class="form-label">Номер УДВ</label>
+
+                            {% if kartochka.udv_number %}
+                            <input type="text" class="form-control" value="{{kartochka.udv_number}}" disabled>
+                            {% else %}
+                            <input type="text" class="form-control" value=" " disabled>
+                            {% endif %}
+                        </div>
+                        <div class="col-6">
+                            <label for="inputNanme4" class="form-label">Дата и Кем выдано</label>
+
+                            {% if kartochka.date_udv %}
+                            <input type="text" class="form-control" value="{{kartochka.date_udv}}" disabled>
+                            {% else %}
+                            <input type="text" class="form-control" value=" " disabled>
+                            {% endif %}
+                        </div>
+                        <div class="col-6">
                             <label for="inputNanme4" class="form-label">Компания</label>
 
                             {% if kartochka.company_name %}
@@ -43,7 +61,7 @@
                             <input type="text" class="form-control" value=" " disabled>
                             {% endif %}
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <label for="inputNanme4" class="form-label">Дата заключения</label>
 
                             {% if kartochka.data_zakluchenia %}
@@ -52,7 +70,7 @@
                             <input type="text" class="form-control" value=" " disabled>
                             {% endif %}
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <label for="inputNanme4" class="form-label">Мат.отв</label>
 
                             {% if kartochka.mat_otv %}
@@ -61,11 +79,20 @@
                             <input type="text" class="form-control" value=" " disabled>
                             {% endif %}
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <label for="inputNanme4" class="form-label">Время реагирования</label>
 
                             {% if kartochka.time_reag %}
                             <input type="text" class="form-control" value="{{kartochka.time_reag}}" disabled>
+                            {% else %}
+                            <input type="text" class="form-control" value=" " disabled>
+                            {% endif %}
+                        </div>
+                        <div class="col-3">
+                            <label for="inputNanme4" class="form-label">Время реагирования не более</label>
+
+                            {% if kartochka.time_reag_nebol %}
+                            <input type="text" class="form-control" value="{{kartochka.time_reag_nebol}}" disabled>
                             {% else %}
                             <input type="text" class="form-control" value=" " disabled>
                             {% endif %}
@@ -271,6 +298,15 @@
 
                         <div class="col-12">
                             <label for="inputNanme4" class="form-label">Примечание</label>
+                            {% if kartochka.vid_rpo %}
+                            <input type="text" class="form-control" value="{{kartochka.vid_rpo}}" disabled>
+                            {% else %}
+                            <input type="text" class="form-control" value=" " disabled>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="inputNanme4" class="form-label">Примечание</label>
                             {% if kartochka.primechanie %}
                             <input type="text" class="form-control" value="{{kartochka.primechanie}}" disabled>
                             {% else %}
@@ -279,6 +315,7 @@
                         </div>
 
                     </form>
+
                 </div>
             </div>
 

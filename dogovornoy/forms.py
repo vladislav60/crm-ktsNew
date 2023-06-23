@@ -4,6 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import SelectDateWidget
 
+
 from .models import *
 
 
@@ -11,15 +12,18 @@ from .models import *
 class AddKlientDogForm(forms.ModelForm):
     class Meta:
         model = kts
-        fields = ['company_name', 'dogovor_number', 'data_zakluchenia', 'nalichiye_dogovora', 'mat_otv', 'company_name',
-                  'act_ty',
-                  'time_reag', 'yslovie_dogovora', 'klient_name', 'name_object', 'adres', 'iin_bin', 'telephone',
+        fields = ['udv_number', 'date_udv', 'company_name', 'dogovor_number', 'data_zakluchenia', 'nalichiye_dogovora',
+                  'mat_otv', 'act_ty', 'time_reag', 'time_reag_nebol', 'yslovie_dogovora', 'klient_name', 'name_object', 'adres', 'iin_bin', 'telephone',
                   'vid_sign', 'urik', 'chasi_po_dog', 'dop_uslugi', 'abon_plata', 'itog_oplata',
                   'object_number', 'peredatchik_number', 'stoimost_rpo', 'date_podkluchenia', 'date_otklulchenia',
                   'gruppa_reagirovania', 'email',
-                  'primechanie', 'agentskie', 'photo']
+                  'vid_rpo', 'primechanie', 'agentskie', 'photo']
         widgets = {
-            'company_name': forms.TextInput(attrs={'required': 'True', 'class': 'form-control'}),
+            'udv_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_udv': forms.TextInput(attrs={'class': 'form-control'}),
+            'company_name': forms.Select(attrs={'class': 'form-select'}),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+            'urik': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'dogovor_number': forms.TextInput(attrs={'required': 'True', 'class': 'form-control'}),
             'data_zakluchenia': forms.DateInput(
                 format=('%Y-%m-%d'),
@@ -33,6 +37,8 @@ class AddKlientDogForm(forms.ModelForm):
             'act_ty': forms.TextInput(attrs={'class': 'form-control'}),
             'time_reag': forms.NumberInput(
                 attrs={'required': 'True', 'min': '0', 'class': 'form-control', 'max': '10000000'}),
+            'time_reag_nebol': forms.NumberInput(
+                attrs={'required': 'True', 'min': '0', 'class': 'form-control', 'max': '10000000'}),
             'yslovie_dogovora': forms.TextInput(attrs={'class': 'form-control'}),
             'klient_name': forms.TextInput(attrs={'required': 'True', 'class': 'form-control'}),
             'name_object': forms.TextInput(attrs={'required': 'True', 'class': 'form-control'}),
@@ -40,8 +46,7 @@ class AddKlientDogForm(forms.ModelForm):
             'iin_bin': forms.NumberInput(
                 attrs={'required': 'True', 'min': '0', 'class': 'form-control'}),
             'telephone': forms.TextInput(attrs={'required': 'True', 'class': 'form-control'}),
-            'vid_sign': forms.TextInput(attrs={'required': 'True', 'class': 'form-control'}),
-            # 'urik': forms.BooleanField(),
+            'vid_sign': forms.Select(attrs={'class': 'form-select'}),
             'chasi_po_dog': forms.NumberInput(
                 attrs={'required': 'True', 'min': '0', 'class': 'form-control', 'max': '10000000'}),
             'dop_uslugi': forms.NumberInput(
@@ -69,6 +74,7 @@ class AddKlientDogForm(forms.ModelForm):
                        }),
             'gruppa_reagirovania': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'vid_rpo': forms.Textarea(attrs={'class': 'form-control'}),
             'primechanie': forms.Textarea(attrs={'class': 'form-control'}),
             'agentskie': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -108,3 +114,9 @@ class AddKlientDogForm(forms.ModelForm):
     #         raise ValidationError('Длина превышает 200 символов')
     #
     #     return klient_name
+
+
+class ExcelImportForm(forms.Form):
+    excel_file = forms.FileField(label='Загрузите Excel файл')
+
+
