@@ -208,6 +208,40 @@ def delete_client(request, klient_id):
     return render(request, 'dogovornoy/delete_client.html', {'kartochka': kartochka})
 
 
+# @method_decorator(login_required, name='dispatch')
+# class DogBaza(ListView):
+#     model = kts
+#     template_name = 'dogovornoy/baza_dogovorov.html'
+#     context_object_name = 'klienty'
+#
+#     def get(self, request, *args, **kwargs):
+#         queryset = self.get_queryset()
+#         paginator = Paginator(queryset, per_page=100)  # Display 100 records per page
+#
+#         page_number = request.GET.get('page')
+#         page_obj = paginator.get_page(page_number)
+#
+#         return render(request, self.template_name, {'klienty': page_obj})
+#
+#     def get_queryset(self):
+#         query = self.request.GET.get('q')
+#         company_name = self.request.GET.get('company_name')
+#         dogovor_number = self.request.GET.get('dogovor_number')
+#         gruppa_reagirovania = self.request.GET.get('gruppa_reagirovania')
+#
+#         queryset = kts.objects.all()
+#
+        # if query:
+        #     queryset = queryset.filter(object_number__icontains=query)
+        # if company_name:
+        #     queryset = queryset.filter(company_name_id__exact=company_name)
+        # if dogovor_number:
+        #     queryset = queryset.filter(dogovor_number__icontains=dogovor_number)
+        # if gruppa_reagirovania:
+        #     queryset = queryset.filter(gruppa_reagirovania__icontains=gruppa_reagirovania)
+#
+#         return queryset
+
 @method_decorator(login_required, name='dispatch')
 class DogBaza(ListView):
     model = kts
@@ -215,26 +249,26 @@ class DogBaza(ListView):
     context_object_name = 'klienty'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'klienty': self.get_queryset()})
-
-    def get_queryset(self):
+        queryset = self.get_queryset()
         query = self.request.GET.get('q')
         company_name = self.request.GET.get('company_name')
         dogovor_number = self.request.GET.get('dogovor_number')
         gruppa_reagirovania = self.request.GET.get('gruppa_reagirovania')
 
-        queryset = kts.objects.all()
-
         if query:
             queryset = queryset.filter(object_number__icontains=query)
         if company_name:
-            queryset = queryset.filter(company_name__exact=company_name)
+            queryset = queryset.filter(company_name_id__exact=company_name)
         if dogovor_number:
             queryset = queryset.filter(dogovor_number__icontains=dogovor_number)
         if gruppa_reagirovania:
             queryset = queryset.filter(gruppa_reagirovania__icontains=gruppa_reagirovania)
 
-        return queryset
+        paginator = Paginator(queryset, per_page=100)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {'klienty': page_obj})
 
 
 @method_decorator(login_required, name='dispatch')
