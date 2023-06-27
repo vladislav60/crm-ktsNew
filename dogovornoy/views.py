@@ -4,6 +4,7 @@ from django.db.models import Count, Sum
 from django.utils.decorators import method_decorator
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator
+from urllib.parse import urlencode
 # from django.contrib.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.views.generic.edit import FormMixin
@@ -150,21 +151,6 @@ def create_dogovor(request, klient_id):
     return response
 
 
-# # Добавление клиента договорной
-# def add_client(request):
-#     # добавление формы нового клиента c сохранением результата заполнения при неудаче
-#     if request.method == 'POST':
-#         form = AddKlientDogForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             # try:
-#             # kts.objects.create(**form.cleaned_data)
-#             form.save()
-#             return redirect('baza_dogovorov')
-#         # except:
-#         #     form.add_error(None, 'Ошибка добавления клиента')
-#     else:
-#         form = AddKlientDogForm()
-#     return render(request, 'dogovornoy/add_client.html', {'form': form, 'menu': menu, 'title': 'Новый клиент'})
 @method_decorator(login_required, name='dispatch')
 class AddClient(FormView):
     template_name = 'dogovornoy/add_client.html'
@@ -179,13 +165,7 @@ class AddClient(FormView):
         return self.render_to_response(self.get_context_data(form=form, menu=menu, title='Новый клиент'))
 
 
-# class UpdateClient(UpdateView):
-#     model = kts
-#     form_class = AddKlientDogForm
-#     template_name = 'dogovornoy/update_client.html'
-#     pk_url_kwarg = 'klient_id'
-#     context_object_name = 'kartochka'
-#     success_url = '/baza_dogovorov/'
+
 @login_required
 def update_client(request, klient_id):
     kartochka = get_object_or_404(kts, pk=klient_id)
@@ -208,40 +188,6 @@ def delete_client(request, klient_id):
     return render(request, 'dogovornoy/delete_client.html', {'kartochka': kartochka})
 
 
-# @method_decorator(login_required, name='dispatch')
-# class DogBaza(ListView):
-#     model = kts
-#     template_name = 'dogovornoy/baza_dogovorov.html'
-#     context_object_name = 'klienty'
-#
-#     def get(self, request, *args, **kwargs):
-#         queryset = self.get_queryset()
-#         paginator = Paginator(queryset, per_page=100)  # Display 100 records per page
-#
-#         page_number = request.GET.get('page')
-#         page_obj = paginator.get_page(page_number)
-#
-#         return render(request, self.template_name, {'klienty': page_obj})
-#
-#     def get_queryset(self):
-#         query = self.request.GET.get('q')
-#         company_name = self.request.GET.get('company_name')
-#         dogovor_number = self.request.GET.get('dogovor_number')
-#         gruppa_reagirovania = self.request.GET.get('gruppa_reagirovania')
-#
-#         queryset = kts.objects.all()
-#
-        # if query:
-        #     queryset = queryset.filter(object_number__icontains=query)
-        # if company_name:
-        #     queryset = queryset.filter(company_name_id__exact=company_name)
-        # if dogovor_number:
-        #     queryset = queryset.filter(dogovor_number__icontains=dogovor_number)
-        # if gruppa_reagirovania:
-        #     queryset = queryset.filter(gruppa_reagirovania__icontains=gruppa_reagirovania)
-#
-#         return queryset
-
 @method_decorator(login_required, name='dispatch')
 class DogBaza(ListView):
     model = kts
@@ -249,14 +195,26 @@ class DogBaza(ListView):
     context_object_name = 'klienty'
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = kts.objects.all()
         query = self.request.GET.get('q')
+        company_names = rekvizity.objects.values_list('id', 'polnoe_name')
+        object_number = self.request.GET.get('object_number')
         company_name = self.request.GET.get('company_name')
         dogovor_number = self.request.GET.get('dogovor_number')
         gruppa_reagirovania = self.request.GET.get('gruppa_reagirovania')
 
         if query:
-            queryset = queryset.filter(object_number__icontains=query)
+            queryset = queryset.filter(
+                Q(object_number__icontains=query) |
+                Q(dogovor_number__icontains=query) |
+                Q(klient_name__icontains=query) |
+                Q(adres__icontains=query) |
+                Q(telephone__icontains=query) |
+                Q(iin_bin__icontains=query) |
+                Q(name_object__icontains=query)
+            )
+        if object_number:
+            queryset = queryset.filter(object_number__icontains=object_number)
         if company_name:
             queryset = queryset.filter(company_name_id__exact=company_name)
         if dogovor_number:
@@ -264,11 +222,17 @@ class DogBaza(ListView):
         if gruppa_reagirovania:
             queryset = queryset.filter(gruppa_reagirovania__icontains=gruppa_reagirovania)
 
-        paginator = Paginator(queryset, per_page=100)
+        paginator = Paginator(queryset, per_page=25)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        return render(request, self.template_name, {'klienty': page_obj})
+        params = request.GET.copy()
+        if 'page' in params:
+            del params['page']
+        pagination_url = request.path + '?' + urlencode(params)
+
+        return render(request, self.template_name, {'klienty': page_obj, 'company_names': company_names, 'pagination_url': pagination_url, 'total_entries': queryset.count()})
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -276,10 +240,6 @@ class Rekvizity(ListView):
     model = rekvizity
     template_name = 'dogovornoy/rekvizity.html'
     context_object_name = 'rekvizity'
-
-    # Убираем все объекты где дата отключения не пусто
-    # def get_queryset(self):
-    #     return kts.objects.filter(date_otklulchenia__isnull=True)
 
 
 @login_required

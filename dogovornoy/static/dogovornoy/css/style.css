@@ -1321,3 +1321,8 @@ h6 {
 .ml {
     margin-left: 30px;
 }
+
+.alseco {
+ min-width: 64px;
+ max-width: 65px;
+}

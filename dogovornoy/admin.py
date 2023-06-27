@@ -3,6 +3,8 @@ from django.contrib import admin
 # Register your models here.
 from .models import *
 
+class AdditionalServiceAdmin(admin.ModelAdmin):
+    list_display = ('kts', 'service_name', 'price', 'date_added')
 
 class ktsAdmin(admin.ModelAdmin):
     list_display = (
@@ -15,3 +17,4 @@ class ktsAdmin(admin.ModelAdmin):
 admin.site.register(kts, ktsAdmin)
 admin.site.register(rekvizity)
 admin.site.register(vid_sign)
+admin.site.register(AdditionalService, AdditionalServiceAdmin)

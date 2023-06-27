@@ -71,6 +71,7 @@
                         <th scope="col">ИИН/БИН</th>
                         <th scope="col">Вид сигнализации</th>
                         <th scope="col">Часы по договору</th>
+                        <th scope="col alseco">Алсеко</th>
                         <th scope="col">сум.план</th>
                         <th scope="col">№ объекта</th>
                         <th scope="col">№ ЦМТ/GSM</th>
@@ -91,6 +92,13 @@
                         <td>{{ kts.iin_bin }}</td>
                         <td>{{ kts.vid_sign }}</td>
                         <td>{{ kts.chasi_po_dog }}</td>
+
+                        {% if kts.dop_uslugi %}
+                            <td class="alseco">{{ kts.dop_uslugi }}</td>
+                        {% else %}
+                            <td class="alseco"></td>
+                        {% endif %}
+
                         <td>{{ kts.itog_oplata }}</td>
                         <td>{{ kts.object_number }}</td>
                         <td>{{ kts.peredatchik_number }}</td>
@@ -139,6 +147,7 @@
                                 <th scope="col">ИИН/БИН</th>
                                 <th scope="col">Вид сигнализации</th>
                                 <th scope="col">Часы по договору</th>
+                                <th scope="col alseco">Алсеко</th>
                                 <th scope="col">сум.план</th>
                                 <th scope="col">№ объекта</th>
                                 <th scope="col">№ ЦМТ/GSM</th>
@@ -159,6 +168,13 @@
                                 <td>{{ kts.iin_bin }}</td>
                                 <td>{{ kts.vid_sign }}</td>
                                 <td>{{ kts.chasi_po_dog }}</td>
+
+                                {% if kts.dop_uslugi %}
+                                    <td class="alseco">{{ kts.dop_uslugi }}</td>
+                                {% else %}
+                                    <td class="alseco"></td>
+                                {% endif %}
+
                                 <td>{{ kts.abon_plata }}</td>
                                 <td>{{ kts.object_number }}</td>
                                 <td>{{ kts.peredatchik_number }}</td>

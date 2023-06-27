@@ -68,6 +68,7 @@
                         <th scope="col">Адрес</th>
                         <th scope="col">ИИН/БИН</th>
                         <th scope="col">Вид сигнализации</th>
+                        <th scope="col">Телефон</th>
                         <th scope="col">Часы по договору</th>
                         <th scope="col">сум.план</th>
                         <th scope="col">№ объекта</th>
@@ -90,6 +91,13 @@
                         <td>{{ kts.adres }}</td>
                         <td>{{ kts.iin_bin }}</td>
                         <td>{{ kts.vid_sign }}</td>
+
+                        {% if kts.telephone %}
+                            <td>{{ kts.telephone }}</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+
                         <td>{{ kts.chasi_po_dog }}</td>
                         <td>{{ kts.itog_oplata }}</td>
                         <td>{{ kts.object_number }}</td>
